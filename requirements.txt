@@ -1,0 +1,17 @@
+langchain
+langchain-community
+langchain-huggingface
+langchain-chroma
+chromadb
+sentence-transformers
+duckduckgo-search
+beautifulsoup4
+requests
+playwright
+fastapi
+uvicorn
+streamlit
+python-dotenv
+ollama
+rank_bm25
+
