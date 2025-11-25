@@ -9,13 +9,15 @@ class Config:
     
     # LLM Settings
     OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    LLM_MODEL = os.getenv("LLM_MODEL", "llama3")
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+    LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini")
+    LLM_MODEL = os.getenv("LLM_MODEL", "gemini-flash-latest")
     
     # Embedding Settings
     EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
     
     # Search Settings
-    SEARCH_RESULTS_LIMIT = int(os.getenv("SEARCH_RESULTS_LIMIT", "10"))
+    SEARCH_RESULTS_LIMIT = int(os.getenv("SEARCH_RESULTS_LIMIT", "20"))
     
     # Reranker Settings
     RERANKER_MODEL_NAME = os.getenv("RERANKER_MODEL_NAME", "cross-encoder/ms-marco-MiniLM-L-6-v2")

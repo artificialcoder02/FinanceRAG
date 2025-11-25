@@ -9,6 +9,12 @@ class EvaluationAgent:
         """
         logger.info("Evaluating answer")
         
+        # Ensure answer is a string
+        if isinstance(answer, list):
+            answer = " ".join(str(item) for item in answer)
+        elif not isinstance(answer, str):
+            answer = str(answer)
+        
         # Simple heuristic evaluation
         score = 0.0
         feedback = []

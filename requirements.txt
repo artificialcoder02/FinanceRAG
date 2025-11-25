@@ -14,4 +14,5 @@ streamlit
 python-dotenv
 ollama
 rank_bm25
+langchain-google-genai
 
