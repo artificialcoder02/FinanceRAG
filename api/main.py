@@ -60,10 +60,19 @@ class Token(BaseModel):
 async def create_admin_user():
     """Create the first admin user if no users exist"""
     try:
-        user_count = db_auth_service.get_user_count()
+        # Test MongoDB connection first
+        try:
+            user_count = db_auth_service.get_user_count()
+            logger.info(f"MongoDB connected. Current user count: {user_count}")
+        except Exception as db_error:
+            logger.error(f"MongoDB connection failed: {db_error}")
+            logger.warning("⚠️ Starting without database connection. Check MONGODB_URL environment variable.")
+            return  # Don't crash, just skip user creation
+        
         if user_count == 0:
             logger.info("No users found. Creating admin user...")
-
+            
+            # Ensure password is short enough for bcrypt (72 bytes max)
             raw_password = config.ADMIN_PASSWORD
 
             if not raw_password:
@@ -99,8 +108,13 @@ async def create_admin_user():
                 # logger.info(f"🔑 Password: {raw_password}")
             else:
                 logger.error("Failed to create admin user")
+        else:
+            logger.info(f"✅ Database ready. {user_count} users exist.")
+            
     except Exception as e:
-        logger.error(f"Error creating admin user: {e}")
+        logger.error(f"⚠️ Startup error (non-fatal): {e}")
+        logger.warning("App will continue running, but authentication may not work properly.")
+        # Don't raise - let the app start anyway
 
 
 # Authentication endpoints
