@@ -1,0 +1,24 @@
+services:
+  # FastAPI Backend
+  - type: web
+    name: financerag-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGODB_URL
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENABLE_AUTH
+        value: "true"
+      - key: ADMIN_EMAIL
+        value: "admin@financerag.com"
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: LLM_PROVIDER
+        value: "gemini"
+      - key: LLM_MODEL
+        value: "gemini-flash-latest"

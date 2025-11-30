@@ -16,3 +16,9 @@ ollama
 rank_bm25
 langchain-google-genai
 
+# Authentication
+pymongo
+bcrypt==4.3.0
+python-jose[cryptography]
+passlib[bcrypt] == 1.7.4
+python-multipart
