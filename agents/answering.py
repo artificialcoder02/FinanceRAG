@@ -103,10 +103,25 @@ Answer (following the mandatory format above):"""
             prompt = self.prompt_template.format(context=context_text, question=query)
             response = self.llm.invoke(prompt)
             
-            # Handle both string responses (Ollama) and AIMessage responses (Gemini)
+            # Handle different response formats
             if hasattr(response, 'content'):
-                return response.content
-            return response
+                content = response.content
+                
+                # If content is a list (new Gemini format), extract text
+                if isinstance(content, list):
+                    text_parts = []
+                    for part in content:
+                        if isinstance(part, dict) and part.get('type') == 'text':
+                            text_parts.append(part.get('text', ''))
+                        elif isinstance(part, str):
+                            text_parts.append(part)
+                    return '\n'.join(text_parts)
+                
+                # If content is a string, return it directly
+                return content
+            
+            # Fallback for other response types
+            return str(response)
         except Exception as e:
             logger.error(f"Answer generation failed: {e}")
             return "Sorry, I encountered an error while generating the answer."

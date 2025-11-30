@@ -1,5 +1,6 @@
 from duckduckgo_search import DDGS
 import logging
+from core.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -9,16 +10,14 @@ class WebSearchAgent:
 
     def search_web(self, query: str):
         """
-        Performs a web search and returns a list of results.
+        Performs a web search using DuckDuckGo and returns a list of results.
         """
         logger.info(f"Searching web for: {query}")
         try:
-            # DDGS.text() returns a list of dicts: [{'title':..., 'href':..., 'body':...}]
-            results = list(self.ddgs.text(query, max_results=10))
+            max_results = config.SEARCH_RESULTS_LIMIT
+            results = list(self.ddgs.text(query, max_results=max_results))
             
-            # Normalize keys to match what pipeline expects (pipeline expects 'link' or 'href'?)
-            # Pipeline uses result.get('link')
-            # DDGS returns 'href'. Let's map it.
+            # Normalize keys to match what pipeline expects
             normalized_results = []
             for r in results:
                 normalized_results.append({
@@ -27,9 +26,11 @@ class WebSearchAgent:
                     "snippet": r.get("body")
                 })
             
+            logger.info(f"DuckDuckGo search succeeded: {len(normalized_results)} results")
             return normalized_results
         except Exception as e:
             logger.error(f"Search failed: {e}")
             return []
 
 web_search_agent = WebSearchAgent()
+
