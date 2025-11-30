@@ -31,7 +31,10 @@ if 'response_times' not in st.session_state:
     st.session_state.response_times = []
 
 # API URL - use environment variable for deployment, default to localhost
-API_URL = os.getenv("API_URL", st.secrets.get("API_URL", "http://localhost:8000"))
+try:
+    API_URL = os.getenv("API_URL", st.secrets.get("API_URL", "http://localhost:8000"))
+except:
+    API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 # Check authentication
 if not st.session_state.authenticated:
